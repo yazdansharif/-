@@ -1,338 +1,421 @@
-/* ===================================
-   RESET
-=================================== */
+/* =====================================================
+   DESIGN TOKENS
+   Edit these variables to retheme the entire site at once.
+===================================================== */
+:root {
+  /* --- Color palette --- */
+  --bg-base: #07070b;
+  --bg-base-2: #0c0d14;
+  --glass-fill: rgba(255, 255, 255, 0.055);
+  --glass-fill-strong: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.35);
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+  --text-primary: rgba(255, 255, 255, 0.94);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.38);
+
+  --accent-a: #6e8cff;   /* periwinkle blue   */
+  --accent-b: #b48dff;   /* soft violet       */
+  --accent-glow: rgba(110, 140, 255, 0.35);
+
+  /* --- Shape --- */
+  --radius-lg: 24px;
+  --radius-md: 20px;
+  --radius-sm: 16px;
+
+  /* --- Motion --- */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 220ms;
+  --dur-med: 480ms;
 }
 
-html{
-    scroll-behavior:smooth;
+/* =====================================================
+   RESET & BASE
+===================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-
-    font-family:"Poppins",sans-serif;
-
-    color:#ffffff;
-
-    min-height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    overflow-x:hidden;
-
-    position:relative;
-
-    background:
-    radial-gradient(circle at top left,#4f7cff33,transparent 35%),
-    radial-gradient(circle at bottom right,#8f5cff33,transparent 35%),
-    linear-gradient(135deg,#09090f,#101018,#161624);
-
+html {
+  color-scheme: dark;
 }
 
-
-/* ===================================
-BACKGROUND LIGHTS
-=================================== */
-
-.bg-circle{
-
-    position:absolute;
-
-    border-radius:50%;
-
-    filter:blur(120px);
-
-    opacity:.45;
-
-    animation:float 14s ease-in-out infinite;
-
+body {
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: radial-gradient(ellipse 120% 80% at 50% -10%, #14152a 0%, var(--bg-base) 55%),
+              var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-.circle1{
+a {
+  color: var(--accent-a);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
 
-    width:340px;
-    height:340px;
-
-    background:#4f7cff;
-
-    top:-120px;
-    left:-80px;
-
+/* Respect users who've asked for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-.circle2{
-
-    width:300px;
-    height:300px;
-
-    background:#905dff;
-
-    bottom:-100px;
-    right:-80px;
-
+/* Visible keyboard focus, kept tidy and on-brand */
+:focus-visible {
+  outline: 2px solid var(--accent-a);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-.circle3{
-
-    width:240px;
-    height:240px;
-
-    background:#00d7ff;
-
-    top:45%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
+/* =====================================================
+   AMBIENT BACKGROUND
+   Slow-moving blurred light orbs + faint grain for depth.
+===================================================== */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-@keyframes float{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-35px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
-
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  will-change: transform;
 }
 
-
-/* ===================================
-MAIN CONTAINER
-=================================== */
-
-.container{
-
-    width:min(92%,950px);
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:28px;
-
-    padding:35px;
-
-    position:relative;
-
-    z-index:2;
-
+.glow--one {
+  width: 42vw;
+  height: 42vw;
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle, var(--accent-a), transparent 70%);
+  animation: drift-one 26s ease-in-out infinite;
 }
 
-
-/* ===================================
-GLASS CARD
-=================================== */
-
-.glass{
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    border-radius:28px;
-
-    backdrop-filter:blur(22px);
-
-    -webkit-backdrop-filter:blur(22px);
-
-    box-shadow:
-
-    0 15px 40px rgba(0,0,0,.35),
-
-    inset 0 1px 0 rgba(255,255,255,.25);
-
+.glow--two {
+  width: 38vw;
+  height: 38vw;
+  bottom: -15%;
+  right: -10%;
+  background: radial-gradient(circle, var(--accent-b), transparent 70%);
+  animation: drift-two 32s ease-in-out infinite;
 }
 
-
-/* ===================================
-HEADER
-=================================== */
-
-.hero{
-
-    padding:40px;
-
-    text-align:center;
-
+.glow--three {
+  width: 26vw;
+  height: 26vw;
+  top: 40%;
+  left: 50%;
+  background: radial-gradient(circle, #4dd0e1, transparent 70%);
+  opacity: 0.25;
+  animation: drift-three 38s ease-in-out infinite;
 }
 
-.hero h1{
-
-    font-size:2.5rem;
-
-    font-weight:700;
-
-    margin-bottom:15px;
-
+@keyframes drift-one {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(6vw, 8vh) scale(1.15); }
+}
+@keyframes drift-two {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-5vw, -6vh) scale(1.1); }
+}
+@keyframes drift-three {
+  0%, 100% { transform: translate(-50%, -40%) scale(1); }
+  50%      { transform: translate(-45%, -35%) scale(1.2); }
 }
 
-.subtitle{
-
-    color:#d5d5d5;
-
-    font-size:1rem;
-
+/* Subtle film-grain texture overlay for a premium, non-flat feel */
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-
-/* ===================================
-TIMER
-=================================== */
-
-.timer-section{
-
-    padding:35px;
-
+/* =====================================================
+   LIQUID GLASS PANEL (shared base)
+===================================================== */
+.glass {
+  position: relative;
+  background: linear-gradient(155deg, var(--glass-fill-strong), var(--glass-fill));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.06) inset,
+    0 18px 50px rgba(0, 0, 0, 0.45);
 }
 
-#timer{
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:18px;
-
+/* Soft reflective sheen across the top edge of every glass panel */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--glass-highlight) 0%, transparent 35%);
+  opacity: 0.08;
+  pointer-events: none;
 }
 
-
-.time-box{
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    border-radius:22px;
-
-    padding:28px;
-
-    text-align:center;
-
-    backdrop-filter:blur(18px);
-
-    transition:.35s ease;
-
+/* =====================================================
+   LAYOUT
+===================================================== */
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(20px, 6vw, 56px) clamp(16px, 5vw, 32px) 64px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 5vw, 48px);
 }
 
-.time-box:hover{
-
-    transform:translateY(-6px);
-
-    background:rgba(255,255,255,.13);
-
-    box-shadow:0 0 25px rgba(255,255,255,.12);
-
+/* =====================================================
+   HEADER PANEL
+===================================================== */
+.header {
+  padding: clamp(28px, 5vw, 44px) clamp(24px, 6vw, 48px);
+  text-align: center;
+  animation: rise-in var(--dur-med) var(--ease-smooth) both;
 }
 
-.number{
-
-    display:block;
-
-    font-size:3rem;
-
-    font-weight:700;
-
+.header__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
-.label{
-
-    display:block;
-
-    margin-top:8px;
-
-    font-size:.9rem;
-
-    color:#d0d0d0;
-
-    letter-spacing:1px;
-
+.header__message {
+  font-size: clamp(1.25rem, 3.4vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #ffffff, #b9c2e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-
-/* ===================================
-FOOTER
-=================================== */
-
-.footer{
-
-    text-align:center;
-
-    color:rgba(255,255,255,.65);
-
-    font-size:.95rem;
-
-    padding-bottom:10px;
-
-    user-select:none;
-
+/* =====================================================
+   TIMER SECTION
+===================================================== */
+.timer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: rise-in var(--dur-med) var(--ease-smooth) both;
+  animation-delay: 80ms;
 }
 
-.footer strong{
-
-    color:white;
-
+.timer__caption {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 500;
 }
 
-.footer:hover{
-
-    color:white;
-
+.timer__start-date {
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 8px;
 }
 
-
-/* ===================================
-RESPONSIVE
-=================================== */
-
-@media(max-width:900px){
-
-    #timer{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
+.timer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(10px, 2.5vw, 20px);
 }
 
-@media(max-width:550px){
+.timer-card {
+  padding: clamp(18px, 4vw, 32px) 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform var(--dur-fast) var(--ease-smooth),
+              box-shadow var(--dur-fast) var(--ease-smooth);
+}
 
-    .hero{
+.timer-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.08) inset,
+    0 22px 60px rgba(0, 0, 0, 0.5),
+    0 0 32px var(--accent-glow);
+}
 
-        padding:28px;
+.timer-card__value {
+  font-size: clamp(1.8rem, 7vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, #ffffff, #d6dcf5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+  transition: opacity var(--dur-fast) ease;
+}
 
-    }
+/* Quick fade pulse applied via JS each time the displayed value changes */
+.timer-card__value.is-updating {
+  animation: tick-pulse 420ms var(--ease-smooth);
+}
 
-    .hero h1{
+@keyframes tick-pulse {
+  0%   { opacity: 0.45; transform: translateY(2px) scale(0.98); }
+  100% { opacity: 1;    transform: translateY(0)    scale(1); }
+}
 
-        font-size:1.8rem;
+.timer-card__label {
+  font-size: clamp(0.68rem, 1.6vw, 0.85rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
 
-    }
+/* =====================================================
+   MINI GAME SECTION
+===================================================== */
+.game {
+  padding: clamp(20px, 4.5vw, 36px);
+  animation: rise-in var(--dur-med) var(--ease-smooth) both;
+  animation-delay: 160ms;
+}
 
-    #timer{
+.game__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
 
-        grid-template-columns:1fr;
+.game__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
 
-    }
+.game__scores {
+  display: flex;
+  gap: 18px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
 
-    .number{
+.game__scores strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
 
-        font-size:2.4rem;
+/* Canvas wrapper keeps the aspect ratio responsive and clips
+   the canvas to the rounded glass corners */
+.game__canvas-wrap {
+  position: relative;
+  width: 100%;
+  /* 5:2-ish playable aspect ratio, comfortable on phones too */
+  aspect-ratio: 5 / 2;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(180deg, #11121d 0%, #0a0a12 100%);
+  touch-action: manipulation;
+}
 
-    }
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
 
+.game__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  background: rgba(7, 7, 11, 0.45);
+  backdrop-filter: blur(6px);
+  transition: opacity var(--dur-fast) ease;
+  pointer-events: none;
+}
+
+.game__overlay.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.game__overlay-text {
+  font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.game__hint {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+.footer {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+  padding-top: 8px;
+}
+
+/* =====================================================
+   ENTRANCE ANIMATION
+===================================================== */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================================
+   RESPONSIVE ADJUSTMENTS
+===================================================== */
+@media (max-width: 640px) {
+  .timer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .game__canvas-wrap {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 380px) {
+  .timer-card__value {
+    font-size: 1.7rem;
+  }
 }
