@@ -1,65 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Elapsed Time Counter</title>
+  <meta name="description" content="A live counter showing the time elapsed since a fixed starting moment, plus a mini endless-runner game." />
 
-    <meta charset="UTF-8">
+  <!-- Google Fonts: SF Pro is not freely distributable, so we use Inter as a
+       visually close, free alternative that mirrors Apple's system type feel. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Elapsed Time</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-    <!-- Background Effects -->
-    <div class="bg-circle circle1"></div>
-    <div class="bg-circle circle2"></div>
-    <div class="bg-circle circle3"></div>
+  <!-- ======================================================= -->
+  <!-- AMBIENT BACKGROUND LAYER                                  -->
+  <!-- Purely decorative floating glow orbs. Safe to leave as-is. -->
+  <!-- ======================================================= -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="glow glow--one"></div>
+    <div class="glow glow--two"></div>
+    <div class="glow glow--three"></div>
+    <div class="grain"></div>
+  </div>
 
-    <!-- Main Content -->
-    <main class="container">
+  <main class="page">
 
-        <!-- Header -->
-        <section class="glass hero">
+    <!-- ======================================================= -->
+    <!-- HEADER / TITLE GLASS PANEL                                -->
+    <!--                                                           -->
+    <!-- ✏️ TO CHANGE THE TITLE TEXT:                              -->
+    <!-- Just edit the text inside the <p class="header__message"> -->
+    <!-- tag below. Nothing else needs to change.                  -->
+    <!-- ======================================================= -->
+    <header class="glass header" id="header">
+      <p class="header__eyebrow">Live Counter</p>
+      <p class="header__message">
+         تایمر شماره 2 این تایمر از پیام دوم اقا که تا دقایقی دیگر خبر جذاب میاید زمان را حساب میکند و ویژگی جدید این تایمر بازی ان است. از ان لذت ببرید
+      </p>
+    </header>
 
-            <h1 id="title">
-                این تایمر تایمر ساعاتی است که اقای گراوند پیام دادند تا دقایقی دیگر خبر جذاب میدهند
-            </h1>
+    <!-- ======================================================= -->
+    <!-- MAIN ELAPSED-TIME COUNTER                                 -->
+    <!-- ======================================================= -->
+    <section class="timer" aria-label="Elapsed time counter">
 
-            <p class="subtitle">
-                Time elapsed since June 28, 2026
-            </p>
+      <p class="timer__caption">Time elapsed since</p>
+      <p class="timer__start-date" id="startDateLabel">—</p>
 
-        </section>
+      <div class="timer__grid" role="group" aria-live="polite" aria-label="Elapsed time">
 
-        <!-- Timer -->
-        <section class="glass timer-section">
+        <div class="glass timer-card">
+          <span class="timer-card__value" id="days">00</span>
+          <span class="timer-card__label">Days</span>
+        </div>
 
-            <div id="timer"></div>
+        <div class="glass timer-card">
+          <span class="timer-card__value" id="hours">00</span>
+          <span class="timer-card__label">Hours</span>
+        </div>
 
-        </section>
+        <div class="glass timer-card">
+          <span class="timer-card__value" id="minutes">00</span>
+          <span class="timer-card__label">Minutes</span>
+        </div>
 
-        <!-- Footer -->
-        <footer class="footer">
+        <div class="glass timer-card">
+          <span class="timer-card__value" id="seconds">00</span>
+          <span class="timer-card__label">Seconds</span>
+        </div>
 
-            &copy; Powered by <strong>Yazdan</strong>
+      </div>
+    </section>
 
-        </footer>
+    <!-- ======================================================= -->
+    <!-- MINI GAME — Endless Runner (Chrome-Dino style)            -->
+    <!--                                                           -->
+    <!-- ✏️ TO USE YOUR OWN PNG IMAGES FOR THE PLAYER/OBSTACLES:    -->
+    <!-- Open game.js and edit the RUNNER_IMG_SRC and               -->
+    <!-- OBSTACLE_IMG_SRCS constants near the top of the file.       -->
+    <!-- Full instructions are written right above them.             -->
+    <!--                                                           -->
+    <!-- Controls: Space / Up Arrow / tap-click the canvas to jump. -->
+    <!-- Fully works on mobile via touch.                            -->
+    <!-- ======================================================= -->
+    <section class="glass game" aria-label="Endless runner mini game">
+      <div class="game__header">
+        <h2 class="game__title">Mini Game</h2>
+        <div class="game__scores">
+          <span>Score: <strong id="gameScore">0</strong></span>
+          <span>Best: <strong id="gameBest">0</strong></span>
+        </div>
+      </div>
 
-    </main>
+      <div class="game__canvas-wrap">
+        <canvas id="gameCanvas" aria-label="Endless runner game canvas, tap or press space to jump"></canvas>
 
-    <script src="script.js"></script>
+        <div class="game__overlay" id="gameOverlay">
+          <p class="game__overlay-text" id="gameOverlayText">Tap, click, or press Space to start</p>
+        </div>
+      </div>
 
+      <p class="game__hint">Space / ↑ / tap the game to jump · avoid the obstacles</p>
+    </section>
+
+    <footer class="footer">
+      &copy; Powered by <strong>Yazdan</strong>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+  <script src="game.js"></script>
 </body>
-
 </html>
